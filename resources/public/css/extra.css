@@ -1,0 +1,12 @@
+input[type="submit"]{
+    margin-top: 1em;
+    display: block;
+}
+
+.headitem {
+    font-size: 1.2em;
+}
+
+.byline {
+    color: #A0A0A0;
+}
