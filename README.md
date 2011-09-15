@@ -10,7 +10,10 @@ lein run
 ```
 
 ## Running migrations
+
+```
 lein run -m noir-messageboard.utils.migrations
+```
 
 ## CSS
 

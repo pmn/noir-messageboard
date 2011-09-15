@@ -6,10 +6,10 @@
 
 (defn database-resource
   "Get database connection information from ENV.
-   SITE_DATABASE_URL should look like:
+   DATABASE_URL should look like:
    postgresql://username:password@localhost:5432/dbname"
   []
-  (let [url (URI. (System/getenv "SITE_DATABASE_URL"))
+  (let [url (URI. (System/getenv "DATABASE_URL"))
         host (.getHost url)
         port (if (pos? (.getPort url)) (.getPort url) 5432)
         path (.getPath url)]

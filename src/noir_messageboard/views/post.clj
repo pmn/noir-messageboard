@@ -46,7 +46,6 @@
            (when-not (posts/owned-by-user? (:id params))
              (resp/redirect (str "/posts/" (:id params)))))
 
-
 ;; Post pages
 
 (defpage "/posts" []
