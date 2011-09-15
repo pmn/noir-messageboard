@@ -4,6 +4,9 @@ A sample messageboard  written in noir.
 
 This code is currently running at: http://noir-messageboard.heroku.com
 
+This page contains good information for getting a Noir app running on Heroku: 
+http://devcenter.heroku.com/articles/clojure-web-application
+
 ## Usage
 
 ```bash
