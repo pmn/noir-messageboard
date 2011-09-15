@@ -2,6 +2,8 @@
 
 A sample messageboard  written in noir. 
 
+This code is currently running at: http://noir-messageboard.heroku.com
+
 ## Usage
 
 ```bash
