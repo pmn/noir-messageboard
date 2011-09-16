@@ -50,9 +50,10 @@
       WHERE p.id = ?"
      (Integer/parseInt id)])))
 
-(defn add! [post]
-  (let [p (-> (assoc post :ownerid (users/current-user-id))
-              (dissoc post :id))]
+(defn add! [{:keys [title body] :as post}]
+  (let [p {:ownerid (users/current-user-id)
+           :title title
+           :body body}]
     (when (valid? post)
       (db/insert! :posts p)
       post)))
