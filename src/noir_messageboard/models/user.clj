@@ -4,8 +4,7 @@
             [noir.util.crypt :as crypt]
             [noir.validation :as vali]
             [noir-messageboard.utils.db :as db]
-            [noir-messageboard.utils.utils :as utils])
-  (:import org.postgresql.Driver))
+            [noir-messageboard.utils.utils :as utils]))
 
 (defn get-by-username [username]
   (first
