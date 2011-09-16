@@ -18,10 +18,9 @@
 (defn describe-time-elapsed
   "Describe the amount of time that has passed (in minutes) in a conversational way"
   [minutes]
-  (let [hours (Math/round (/ minutes 60.0))
-        days (Math/round (/ minutes 1440.0))
-        months (Math/round (/ minutes 43829.0639))
-        years (Math/round (/ minutes 525948.766))]
+  (let [[hours days months years]
+        (for [amt [60.0 1440.0 43829.0639 525948.766]]
+          (Math/round (/ minutes amt)))]
     (cond
      (= minutes 0) "just now"
      (< minutes 2) "a minute ago"
