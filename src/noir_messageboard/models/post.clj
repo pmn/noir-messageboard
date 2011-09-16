@@ -31,16 +31,6 @@
      INNER JOIN users on users.id = p.ownerid
      ORDER BY p.createdat DESC"]))
 
-(defn get-list-by-username [username]
-  (db/fetch-results
-   ["SELECT p.*, users.username, users.email
-     FROM posts p
-     INNER JOIN users ON users.id = p.ownerid
-     WHERE users.username = ?
-     ORDER BY p.createdat DESC
-     LIMIT ? OFFSET ?"
-    username]))
-
 (defn get-item [id]
   (first
    (db/fetch-results
