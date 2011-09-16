@@ -83,7 +83,7 @@
 
 (defpage "/posts/edit/:id" {:keys [id] :as editpost}
   ;; Display the passed in post if it's a valid object, otherwise, fetch from the db
-  (if-let [post (if (utils/contains-all? editpost [:id :title :body])
+  (if-let [post (if (every? editpost [:id :title :body])
                   editpost
                   (posts/get-item id))]
     (common/layout

@@ -6,17 +6,12 @@
             [noir.validation :as vali])
   (:import [com.petebevin.markdown MarkdownProcessor]))
 
-(defn contains-all?
-  "Apply contains against a vector of keys"
-  [m ks]
-  (every? #(contains? m %) ks))
-
 ;; Markdown Processing
 
 (def mdp (com.petebevin.markdown.MarkdownProcessor.))
 
 (defn markdownify [text]
-  (. mdp (markdown (escape-html text))))
+  (.markdown mdp (escape-html text)))
 
 ;; humanize dates
 

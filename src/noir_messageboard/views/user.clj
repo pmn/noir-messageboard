@@ -85,7 +85,7 @@
   (resp/redirect "/"))
 
 (defpage "/profile" {:as profile}
-  (let [userprofile (if (utils/contains-all? profile [:email :essay])
+  (let [userprofile (if (every? profile [:email :essay])
                       profile
                       (users/get-by-username (:username (session/get :user))))]
     (common/layout
