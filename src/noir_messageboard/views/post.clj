@@ -71,7 +71,7 @@
   (if-let [post (posts/get-item id)]
     (common/layout
      (escape-html (:title post))
-     [:div (utils/markdownify (escape-html (:body post)))]
+     [:div (utils/markdownify (:body post))]
      [:div "Added " (utils/human-date (:createdat post))
       " by: " (link-to (str "/users/" (:username post)) (:username post))]
      (post-footer post))

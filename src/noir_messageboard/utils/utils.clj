@@ -1,4 +1,5 @@
 (ns noir-messageboard.utils.utils
+  (:use [hiccup.core :only [escape-html]])
   (:require [clj-time.core :as ctime]
             [clj-time.coerce :as tcoerce]
             [clj-time.format :as tform]
@@ -15,7 +16,7 @@
 (def mdp (com.petebevin.markdown.MarkdownProcessor.))
 
 (defn markdownify [text]
-  (. mdp (markdown text)))
+  (. mdp (markdown (escape-html text))))
 
 ;; humanize dates
 
