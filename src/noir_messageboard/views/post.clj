@@ -69,12 +69,15 @@
 
 (defpage "/posts/:id" {:keys [id]}
   (if-let [post (posts/get-item id)]
-    (common/layout
-     (escape-html (:title post))
-     [:div (utils/markdownify (:body post))]
-     [:div "Added " (utils/human-date (:createdat post))
-      " by: " (link-to (str "/users/" (:username post)) (:username post))]
-     (post-footer post))
+    (let [title (escape-html (:title post))
+          body (utils/markdownify (:body post))
+          createdat (utils/human-date (:createdat post))
+          username (:username post)]
+      (common/layout
+       title
+       [:div body
+        [:div "Added " createdat " by: " (link-to (str "/users/" username) username)]
+        (post-footer post)]))
     (common/layout
      [:h3 "Post not found"])))
 
