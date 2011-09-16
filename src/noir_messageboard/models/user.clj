@@ -1,4 +1,5 @@
 (ns noir-messageboard.models.user
+  (:use [hiccup.core :only [escape-html]])
   (:require [noir.session :as session]
             [noir.util.crypt :as crypt]
             [noir.validation :as vali]
@@ -112,7 +113,7 @@
 ;; CRUD
 
 (defn add! [{:keys [username password] :as user}]
-  (let [usermap {:username username
+  (let [usermap {:username (escape-html username)
                  :password (utils/with-crypted password)}]
     (when (valid? user)
       (db/insert! :users

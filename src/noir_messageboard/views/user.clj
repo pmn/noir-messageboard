@@ -114,7 +114,7 @@
     (resp/redirect "/")
     (render "/changepw" changepw)))
 
-(defpage "/users/:username" {:keys [username] :as user}
+(defpage "/users/:username" {:keys [username]}
   (if-let [user (users/get-by-username username)]
     (common/layout
      (str "About " username)
