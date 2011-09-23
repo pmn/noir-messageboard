@@ -28,5 +28,5 @@ http://twitter.github.com/bootstrap/
 
 ## License
 
-BSD, MIT, Apache, or any other license you'd like to use. 
-
+MIT
+http://www.opensource.org/licenses/mit-license.php
