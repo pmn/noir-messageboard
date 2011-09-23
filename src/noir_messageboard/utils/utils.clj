@@ -29,6 +29,7 @@
      (< hours 24) (str hours " hours ago")
      (= days 1) "yesterday"
      (< days 7) (str days " days ago")
+     (= 1 (Math/round (/ days 7.0))) "1 week ago"
      (< days 31) (str (Math/round (/ days 7.0)) " weeks ago")
      (= months 1) "a month ago"
      (< months 12) (str months " months ago")
@@ -43,8 +44,8 @@
                           (tcoerce/from-long (.getTime t)) (ctime/now)))
         datetime (tform/unparse (tform/formatters :rfc822)
                                 (tcoerce/from-long (.getTime t)))]
-    describe-time-elapsed minutes-elapsed))
-
+    (describe-time-elapsed minutes-elapsed)))
+  
 ;; Encryption helper
 
 (defmacro with-crypted
