@@ -32,6 +32,7 @@
 (defpartial post-footer [{:keys [id ownerid]}]
   (let [userid (:id (session/get :user))]
     (if (= ownerid userid)
+
       [:div (link-to (str "/posts/edit/" id) "Edit post")]
       [:div (link-to "/" "Return to list")])))
 

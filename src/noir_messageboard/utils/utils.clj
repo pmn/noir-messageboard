@@ -43,10 +43,7 @@
                           (tcoerce/from-long (.getTime t)) (ctime/now)))
         datetime (tform/unparse (tform/formatters :rfc822)
                                 (tcoerce/from-long (.getTime t)))]
-    ;; Use friendly times for the past 2 days, otherwise use the date
-    (if (< minutes-elapsed 2880)
-      (describe-time-elapsed minutes-elapsed)
-      datetime)))
+    describe-time-elapsed minutes-elapsed))
 
 ;; Encryption helper
 
