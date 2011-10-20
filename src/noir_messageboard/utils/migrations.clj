@@ -43,6 +43,7 @@
 
 (defn -main []
   (print "Creating tables... ")(flush)
-  (init-db!)
+  ;;  (init-db!)
+  (init-comment-table!)
   (println "... done!"))
      
