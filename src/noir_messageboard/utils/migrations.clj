@@ -44,6 +44,6 @@
 (defn -main []
   (print "Creating tables... ")(flush)
   ;;  (init-db!)
-  (init-comment-table!)
+  (init-db!)
   (println "... done!"))
      
