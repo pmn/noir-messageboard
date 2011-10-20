@@ -44,7 +44,7 @@
      [:div.byline (link-to (str "/users/" username) username)
       " replied " (utils/human-date createdat) ":"]
      [:blockquote
-     [:div.comment (escape-html (:body comment))]]]))
+     [:div.comment (utils/markdownify (:body comment))]]]))
 
 (defpartial render-comments [comments]
   [:div (map render-comment comments)])
