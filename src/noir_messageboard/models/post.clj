@@ -26,7 +26,9 @@
 
 (defn get-list []
   (db/fetch-results
-   ["SELECT p.*, users.username, users.email
+   ["SELECT p.*, users.username, users.email,
+           (SELECT COUNT(*) FROM comments
+            WHERE postid = p.id) as commentcount
      FROM posts p
      INNER JOIN users on users.id = p.ownerid
      ORDER BY p.createdat DESC"]))
@@ -39,6 +41,17 @@
       INNER JOIN users ON users.id = p.ownerid
       WHERE p.id = ?"
      (Integer/parseInt id)])))
+
+(defn get-comments
+  "Get all the comments for a post."
+  [id]
+  (db/fetch-results
+   ["SELECT c.*, users.username, users.email
+     FROM comments c
+     INNER JOIN users on users.id = c.ownerid
+     WHERE c.postid = ?
+     ORDER BY c.createdat"
+    id]))
 
 (defn add! [{:keys [title body] :as post}]
   (let [p {:ownerid (users/current-user-id)

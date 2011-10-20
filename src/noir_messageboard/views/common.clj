@@ -27,4 +27,5 @@
                [:div#wrapper
                 [:h2 title]
                 [:hr]
-                content]]))
+                content]
+               [:hr]]))

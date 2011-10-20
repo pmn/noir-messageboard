@@ -25,9 +25,21 @@
      [:body "varchar"]
      [:createdat :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"])))
 
+(defn init-comment-table! []
+  (jdbc/with-connection db/db
+    (jdbc/create-table
+     :comments
+     [:id "serial primary key"]
+     [:postid :int "references posts(id)"]
+     [:parentid :int]
+     [:body "varchar"]
+     [:ownerid :int "references users(id)"]
+     [:createdat :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"])))
+
 (defn init-db! []
   (init-user-table!)
-  (init-post-table!))
+  (init-post-table!)
+  (init-comment-table!))
 
 (defn -main []
   (print "Creating tables... ")(flush)
