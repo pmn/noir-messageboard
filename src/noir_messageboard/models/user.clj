@@ -9,7 +9,7 @@
 (defn get-by-username [username]
   (first
    (db/fetch-results
-    ["SELECT *
+    ["SELECT id, username, password, essay, email
       FROM users
       WHERE username = ?"
      username])))
@@ -17,7 +17,7 @@
 (defn get-by-id [id]
   (first
    (db/fetch-results
-    ["SELECT *
+    ["SELECT id, username, password, essay, email
       FROM users
       WHERE id = ?"
      (Integer/parseInt id)])))
