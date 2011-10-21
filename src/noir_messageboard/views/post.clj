@@ -29,7 +29,7 @@
 (defpartial render-post [{:keys [id title createdat username commentcount]}]
   [:li
    [:div.headitem (link-to (str "/posts/" id) title)]
-   [:div.byline (link-to (str "/posts/" id "#comments") commentcount " comments") "."
+   [:div.byline commentcount " comments."
     " Posted " (utils/human-date createdat)
     " by " (link-to (str "/users/" username) username)]])
 
