@@ -14,6 +14,15 @@ lein deps
 lein run
 ```
 
+## Database connection string
+This expects an environment variable called DATABASE URL. You can change this in utils/db.clj
+
+The connection string looks like this: 
+
+```
+postgresql://username:password@localhost:5432/dbname
+```
+
 ## Running migrations
 
 ```

@@ -93,6 +93,12 @@
    [:div.form-stacked
     (form-to [:post "/posts/add"]
              (post-fields post)
+             [:br]
+             [:span
+              [:strong (link-to
+                        "http://daringfireball.net/projects/markdown/syntax/"
+                        "Markdown")]
+              " supported here"]
              (submit-button "Add!"))]))
 
 (defpage [:post "/posts/add"] {:as post}

@@ -35,7 +35,7 @@
 
 (defpartial profile-fields [{:keys [email essay]}]
   (fields/validated-fields
-   [{:name "email" :label "Email Address:" :value email :cssclass "xlarge"}
+   [{:name "email" :label "Email Address (not visible to the public):" :value email :cssclass "xlarge"}
     {:name "essay" :label "About you (markdown supported):" :value essay
      :type "textarea" :cssclass "xlarge"}]))
 
@@ -73,6 +73,9 @@
    [:div.form-stacked
     (form-to [:post "/login"]
              (login-fields user)
+             [:br]
+             [:span "No account? "
+              [:strong (link-to "/register" "Register here")]]
              (submit-button "Log in"))]))
 
 (defpage [:post "/login"] {:as user}

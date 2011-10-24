@@ -17,15 +17,22 @@
 (defn get-by-id [id]
   (first
    (db/fetch-results
-    ["SELECT id, username, password, essay, email
+    ["SELECT id, username, password, essay, email,
+             (select count(*) from posts where userid = ?) as postcount,
+             (select count(*) from comments where userid = ?) as commentcount
       FROM users
       WHERE id = ?"
+     (Integer/parseInt id)
+     (Integer/parseInt id)
      (Integer/parseInt id)])))
 
 (defn get-list []
   (db/fetch-results
-   ["SELECT *
-     FROM users"]))
+   ["SELECT u.*,
+          (select count(*) from posts where ownerid = u.id) as postcount,
+          (select count(*) from comments where ownerid = u.id) as commentcount
+     FROM users u
+     ORDER BY createdat DESC"]))
 
 (defn get-posts [userid]
   (db/fetch-results
@@ -34,6 +41,14 @@
      WHERE ownerid = ?
      ORDER BY createdat DESC"
     userid]))
+
+(defn is-admin? [userid]
+  "Test if the user is an administrator. Currently the first user is the admin."
+  (= userid (->
+             (db/fetch-results
+              ["SELECT MIN(id) as minid FROM users"])
+             first
+             :minid)))
 
 ;; Validation
 
@@ -121,6 +136,7 @@
 (defn delete!
   "Delete a user AND all of the user's posts"
   [userid]
+  (db/delete-by-ownerid! :comments (Integer/parseInt userid))
   (db/delete-by-ownerid! :posts (Integer/parseInt userid))
   (db/delete! :users (Integer/parseInt userid)))
 
