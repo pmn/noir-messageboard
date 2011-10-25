@@ -18,8 +18,8 @@
   (first
    (db/fetch-results
     ["SELECT id, username, password, essay, email,
-             (select count(*) from posts where userid = ?) as postcount,
-             (select count(*) from comments where userid = ?) as commentcount
+             (select count(*) from posts where ownerid = ?) as postcount,
+             (select count(*) from comments where ownerid = ?) as commentcount
       FROM users
       WHERE id = ?"
      (Integer/parseInt id)
@@ -39,6 +39,16 @@
    ["SELECT *
      FROM posts
      WHERE ownerid = ?
+     ORDER BY createdat DESC"
+    userid]))
+
+(defn get-comments [userid]
+  (db/fetch-results
+   ["SELECT c.id, c.body, c.createdat, c.postid,
+            p.title as posttitle, p.createdat as postcreatedat
+     FROM posts p
+     INNER JOIN comments c on c.postid = p.id
+     WHERE c.ownerid = ?
      ORDER BY createdat DESC"
     userid]))
 
@@ -157,4 +167,12 @@
   (when (passwords-match? changedpassword)
     (db/update! :users
                 (:id (session/get :user))
+                {:password (utils/with-crypted password)})))
+
+(defn admin-change-password!
+  "Act as an admin & change a user's password."
+  [{:keys [uid password confirmpass] :as changedpassword}]
+  (when (passwords-match? changedpassword)
+    (db/update! :users
+                (Integer/parseInt uid)
                 {:password (utils/with-crypted password)})))

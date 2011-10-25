@@ -1,7 +1,8 @@
 (ns noir-messageboard.views.admin
   (:use [noir.core :only [defpage defpartial render pre-route]]
         [hiccup.page-helpers :only [link-to]]
-        [hiccup.form-helpers :only [form-to submit-button]])
+        [hiccup.form-helpers :only [form-to submit-button]]
+        [noir-messageboard.views.user :only [changepw-fields]])
   (:require [noir-messageboard.models.post :as posts]
             [noir-messageboard.models.user :as users]
             [noir-messageboard.models.comment :as comments]
@@ -69,6 +70,17 @@
     (resp/redirect "/users")))
 
 
-(defpage "/users/:id/changepass" []
-  (common/layout
-   "Change a password"))
+(defpage "/users/:id/changepass" {:keys [id] :as changepw}
+  (let [user (users/get-by-id id)]
+    (common/layout
+     (str "Change password for " (:username user))
+     [:div.form-stacked
+     (form-to [:post (str "/users/" id "/changepass")]
+              [:input {:type "hidden" :name "uid" :value id}]
+              (changepw-fields changepw)
+              (submit-button "Reset Password"))])))
+
+(defpage [:post "/users/:id/changepass"] {:as changepw}
+  (if (users/admin-change-password! changepw)
+    (resp/redirect "/")
+    (render (str "/users/:id/changepass") changepw)))

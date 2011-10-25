@@ -1,5 +1,6 @@
 (ns noir-messageboard.views.user
   (:use [noir.core :only [defpage defpartial render pre-route]]
+        [hiccup.core :only [escape-html]]
         [hiccup.form-helpers :only [form-to submit-button]]
         [hiccup.page-helpers :only [link-to]])
   (:require [noir-messageboard.models.user :as users]
@@ -50,6 +51,15 @@
 
 (defpartial render-user-posts [items]
   [:ol (map render-user-post items)])
+
+(defpartial render-user-comment [{:keys [postid posttitle body createdat]}]
+  [:li (take 80 (escape-html body))
+   (if (< 80 (count (escape-html body))) "[...]")
+   " <b>on</b> \"" (link-to (str "/posts/" postid) posttitle) "\""
+   [:div.byline "Posted " (utils/human-date createdat)]])
+
+(defpartial render-user-comments [items]
+  [:ol (map render-user-comment items)])
 
 ;; Pages
 
@@ -119,11 +129,15 @@
 
 (defpage "/users/:username" {:keys [username]}
   (if-let [user (users/get-by-username username)]
-    (common/layout
-     (str "About " username)
-     [:div.about (utils/markdownify (:essay user))]
-     [:h3 username "'s posts"]
-     (render-user-posts (users/get-posts (:id user))))
+    (let [posts (users/get-posts (:id user))
+          comments (users/get-comments (:id user))]
+      (common/layout
+       (str "About " username)
+       [:div.about (utils/markdownify (:essay user))]
+       [:h3 username "'s posts"]
+       (render-user-posts (users/get-posts (:id user)))
+       [:h3 username "'s comments"]
+       (render-user-comments (users/get-comments (:id user)))))
     (common/layout
      "User not found"
      [:h3 "User not found"])))

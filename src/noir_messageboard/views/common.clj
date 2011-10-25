@@ -12,9 +12,9 @@
         loginlink (link-to "/login" "Log in")
         registerlink (link-to "/register" "Register")]
     (if-not (nil? username)
-      [:span profilelink " (" logoutlink ")"
+      [:span profilelink " [" logoutlink "]"
        (if (users/is-admin? userid)
-         [:span (link-to "/users" " [admin] ")])]
+         [:span " " (link-to "/users" "[admin] ")])]
       [:span loginlink " or " registerlink])))
 
 (defpartial layout [title & content]
