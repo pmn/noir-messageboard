@@ -87,16 +87,26 @@
              (resp/redirect "/login")))
 
 (pre-route "/posts/edit/:id" {:keys [params]}
-           (when-not (posts/owned-by-user? (:id params))
-             (resp/redirect (str "/posts/" (:id params)))))
+           (let [userid (:id (session/get :user))]
+                 (when-not (or (posts/owned-by-user? (:id params))
+                               (users/is-admin? userid))
+                   (resp/redirect (str "/posts/" (:id params))))))
+
+(pre-route "/posts/delete/:id" {:keys [params]}
+           (let [userid (:id (session/get :user))]
+                 (when-not (or (posts/owned-by-user? (:id params))
+                               (users/is-admin? userid))
+                   (resp/redirect (str "/posts/" (:id params))))))
+
 
 ;; Post pages
 
 (defpage "/posts" []
   (common/layout
-   "Announcements"
+   "Home"
+   [:h3 "Announcements"]
    (render-posts (posts/get-stickied-list))
-   [:h2 "Posts"]
+   [:h3 "Posts"]
    (render-posts (posts/get-list))
    (link-to "/posts/add" "Add a post!")))
 
@@ -161,6 +171,20 @@
           (if (comments/add! c)
             (resp/redirect (str "/posts/" id))
             (render "/posts/:id" id))))
+
+
+(defpage "/posts/delete/:id" {:keys [id] :as deletepost}
+  (if-let [post (posts/get-item id)]
+    (common/layout
+     (str "Delete post: '" (:title post) "'?")
+     (form-to [:post (str "/posts/delete/" id)]
+              (submit-button "Delete post!")))
+    (resp/redirect "/posts")))
+
+(defpage [:post "/posts/delete/:id"] {:keys [id]}
+  (posts/delete! id)
+  (resp/redirect "/posts"))
+
 
 (defpage [:post "/togglesticky"] {:keys [postid]}
   (let [post (posts/get-item  postid)

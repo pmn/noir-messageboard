@@ -86,14 +86,16 @@
 
 (defn edit! [post]
   (when (and (valid? post)
-             (owned-by-user? (:id post)))
+             (or (owned-by-user? (:id post))
+                 (users/is-admin? (users/current-user-id))))
     (db/update! :posts
                 (Integer/parseInt (:id post))
                 (dissoc post :id))
     post))
 
 (defn delete! [id]
-  (when (owned-by-user? id)
+  (when (or (owned-by-user? id)
+            (users/is-admin? (users/current-user-id)))
     (db/delete! :posts (Integer/parseInt id))))
 
 (defn search [term]
