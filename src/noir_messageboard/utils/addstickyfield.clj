@@ -3,14 +3,14 @@
             [noir-messageboard.utils.db :as db])
   (:import org.postgresql.Driver))
 
-(defn create-sticky-field
+(defn update-fields
   "Add the 'stickied' field to the posts table"
   []
-  (let [sql "ALTER TABLE posts ADD stickied BOOLEAN"]
+  (let [sql "UPDATE posts SET stickied = false"]
     (jdbc/with-connection db/db
       (jdbc/do-commands sql))))
 
 (defn -main []
   (print "running migration... ") (flush)
-  (create-sticky-field)
+  (update-fields)
   (println "done!"))
