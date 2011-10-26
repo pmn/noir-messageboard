@@ -31,7 +31,18 @@
             WHERE postid = p.id) as commentcount
      FROM posts p
      INNER JOIN users on users.id = p.ownerid
+     WHERE p.stickied = '0'
      ORDER BY p.createdat DESC"]))
+
+(defn get-stickied-list []
+  (db/fetch-results
+   ["SELECT p.*, users.username, users.email,
+           (SELECT COUNT(*) FROM comments
+            WHERE postid = p.id) as commentcount
+     FROM posts p
+     INNER JOIN users on users.id = p.ownerid
+     WHERE p.stickied = '1'
+     ORDER BY p.createdat DESC"]))   
 
 (defn get-item [id]
   (first
@@ -53,9 +64,21 @@
      ORDER BY c.createdat"
     id]))
 
+(defn toggle-post-sticky!
+  "Turn a regular post into a stickied post. Only admins should do this."
+  [post]
+  (let [postid (:id post)
+        stickied-post {:id postid
+                       :stickied (not (:stickied post))}]
+  (db/update! :posts
+              postid
+              stickied-post)
+  (str (:stickied post))))
+  
 (defn add! [{:keys [title body] :as post}]
   (let [p {:ownerid (users/current-user-id)
            :title title
+           :stickied false
            :body body}]
     (when (valid? post)
       (db/insert! :posts p)

@@ -20,6 +20,7 @@
     (jdbc/create-table
      :posts
      [:id "serial primary key"]
+     [:stickied :boolean]
      [:ownerid :int "references users(id)"]
      [:title "varchar"]
      [:body "varchar"]

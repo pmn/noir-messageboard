@@ -1,6 +1,6 @@
 (ns noir-messageboard.views.common
   (:use [noir.core :only [defpartial]]
-        [hiccup.page-helpers :only [html5 include-css link-to]])
+        [hiccup.page-helpers :only [html5 include-css include-js link-to]])
   (:require [noir.session :as session]
             [noir-messageboard.models.user :as users]))
 
@@ -23,7 +23,9 @@
                [:title title " | noir-messageboard"]
                (include-css "/css/reset.css")
                (include-css "/css/site.css")
-               (include-css "/css/extra.css")]
+               (include-css "/css/extra.css")
+               (include-js "https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js")
+               (include-js "/js/site.js")]
               [:body.container
                [:div.row
                 [:h1.span3.columns (link-to "/" "Messageboard!")]

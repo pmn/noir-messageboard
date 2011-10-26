@@ -120,7 +120,6 @@
   [user]
   (when (can-login? user)
     (session/put! :user (get-by-username (:username user)))
-    (session/flash-put! "Successfully signed in.")
     user))
 
 (defn logout

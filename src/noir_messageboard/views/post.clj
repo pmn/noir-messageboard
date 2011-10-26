@@ -36,7 +36,6 @@
 (defpartial render-posts [items]
   [:ol (map render-post items)])
 
-
 (defpartial render-comment [comment]
   (let [username (:username comment)
         createdat (:createdat comment)]
@@ -49,11 +48,23 @@
 (defpartial render-comments [comments]
   [:div (map render-comment comments)])
 
-(defpartial post-footer [{:keys [id ownerid]}]
+(defpartial sticky-link [{:keys [id stickied]}]
+  (if stickied
+    [:a#togglesticky {:href "#" :onclick (str "togglesticky(" id "); return false;")} " [Unsticky]"]
+    [:a#togglesticky {:href "#" :onclick (str "togglesticky(" id "); return false;")} " [Make Sticky]"]))
+  
+(defpartial post-footer [{:keys [id ownerid stickied] :as post}]
   (let [userid (:id (session/get :user))]
-    (if (= ownerid userid)
-      [:div (link-to (str "/posts/edit/" id) "Edit post")]
-      [:div (link-to "/" "Return to list")])))
+    [:div
+     (when (or (= ownerid userid)
+               (users/is-admin? userid))
+       [:span
+        [:span (link-to (str "/posts/edit/" id) "[Edit]")]
+        " "
+        [:span (link-to (str "/posts/delete/" id) "[Delete]")]
+        (when (users/is-admin? userid)
+          (sticky-link post))])
+     [:div (link-to "/" "Return to list")]]))
 
 (defpartial comment-block [postid comments]
   (let [username (:username (session/get :user))]
@@ -83,7 +94,9 @@
 
 (defpage "/posts" []
   (common/layout
-   "Posts"
+   "Announcements"
+   (render-posts (posts/get-stickied-list))
+   [:h2 "Posts"]
    (render-posts (posts/get-list))
    (link-to "/posts/add" "Add a post!")))
 
@@ -148,3 +161,9 @@
           (if (comments/add! c)
             (resp/redirect (str "/posts/" id))
             (render "/posts/:id" id))))
+
+(defpage [:post "/togglesticky"] {:keys [postid]}
+  (let [post (posts/get-item  postid)
+        userid (:id (session/get :user))]
+    (when (users/is-admin? userid)
+      (posts/toggle-post-sticky! post))))

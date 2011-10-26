@@ -19,6 +19,7 @@
      :password password
      :domain domain}))
 
-(def secret-key
-  ;Return the app's secret key.
+(defn secret-key 
+  "Generate a secret key"
+  []
   (System/getenv "SECRET_KEY"))
